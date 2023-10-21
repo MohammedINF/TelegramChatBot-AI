@@ -2,6 +2,17 @@ const { DiscussServiceClient } = require('@google-ai/generativelanguage');
 const { GoogleAuth } = require('google-auth-library');
 const TelegramBot = require('node-telegram-bot-api');
 const token = '6331919192:AAGoTSQdlz_89MEyRakrhGzQhgEGcGLRZWc';
+const express = require('express');
+const app = express();
+const port = process.env.PORT || 3000;
+
+app.get('/', (req, res) => {
+  res.send('Hello World!');
+});
+
+app.listen(port, () => {
+  console.log(`Server is running on http://localhost:${port}`);
+});
 
 const bot = new TelegramBot(token, { polling: true });
 
