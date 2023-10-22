@@ -19,7 +19,7 @@ const bot = new TelegramBot(token, { polling: true });
 const MODEL_NAME = 'YOUR PALM MODEL NAME';
 const API_KEY = 'YOUR PALM API KEY';
 
-const MAX_HISTORY_MESSAGES = 5;  // maximum number of previous messages to keep
+const MAX_HISTORY_MESSAGES = 3;  // maximum number of previous messages to keep
 
 const client = new DiscussServiceClient({
     authClient: new GoogleAuth().fromAPIKey(API_KEY),
