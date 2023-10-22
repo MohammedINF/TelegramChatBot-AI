@@ -1,7 +1,7 @@
 const { DiscussServiceClient } = require('@google-ai/generativelanguage');
 const { GoogleAuth } = require('google-auth-library');
 const TelegramBot = require('node-telegram-bot-api');
-const token = '6331919192:AAGoTSQdlz_89MEyRakrhGzQhgEGcGLRZWc';
+
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 3000;
@@ -13,11 +13,11 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
-
+const token = 'YOUR TELEGRAM TOKEN';
 const bot = new TelegramBot(token, { polling: true });
 
-const MODEL_NAME = 'models/chat-bison-001';
-const API_KEY = 'AIzaSyCGNHIx6AF919A0DOA52LhAW4uS5MTIoDU';
+const MODEL_NAME = 'YOUR PALM MODEL NAME';
+const API_KEY = 'YOUR PALM API KEY';
 
 const MAX_HISTORY_MESSAGES = 5;  // maximum number of previous messages to keep
 
@@ -35,17 +35,22 @@ async function generateResponse(messages) {
 }
 
 const chatHistory = {};  // keep track of chat history for each chat
+
+// Error Messages
 const errorMessages = [
     "I'm sorry, something went wrong.",
     "Oops! There was an error.",
     "My circuits are a little frazzled. Try again later.",
     "An error occurred. Please try again.",
 ];
+
 bot.on('message', async function (msg) {
     let waitMessageIds = [];
     try {
+
+        //Customize your Messages and Responses
         if (msg.text === '/start') {
-            bot.sendMessage(msg.chat.id, 'Hello! Welcome to Aeva ChatBot. How can I assist you today?');
+            bot.sendMessage(msg.chat.id, 'Hello! Welcome to <YOUR BOT NAME> ChatBot. How can I assist you today?');
             return;
         }
         if (msg.text.toLowerCase().replace(/[^\w\s]/g, '') === "what is your name" ||
@@ -58,6 +63,8 @@ bot.on('message', async function (msg) {
             bot.sendMessage(msg.chat.id, 'I am Created by Mohammed Othman, for more Information visit [this link](https://mohammed-info.netlify.app/)', { parse_mode: 'Markdown' });
             return;
         }
+
+        //Get user message and cht history
         const userMessage = msg.text.toLowerCase();
         const messages = chatHistory[msg.chat.id] || [];
         messages.push({ content: userMessage });
@@ -75,8 +82,9 @@ bot.on('message', async function (msg) {
         const waitMessage = await bot.sendMessage(msg.chat.id, '🤔');
         const waitMessage2 = await bot.sendMessage(msg.chat.id, 'Still working on it...');
         waitMessageIds.push(waitMessage2.message_id);
-
         waitMessageIds.push(waitMessage.message_id);
+
+        //send "action" message 
         bot.sendChatAction(msg.chat.id, 'typing');
         const response = await generateResponse(messages);
 
